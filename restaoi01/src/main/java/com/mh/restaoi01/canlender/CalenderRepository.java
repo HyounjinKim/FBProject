@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface CalenderRepository extends JpaRepository<CalenderRecrod, String> {
 
-    @Query("SELECT * FROM record WHERE id = 'ab001'")
-    public List<String> calendersql(String id);
+    @Query(value = "SELECT * FROM record r WHERE id = 'ab001'",nativeQuery = true)
+    public List<String> calenderFKsql(String id);
 
 
 }

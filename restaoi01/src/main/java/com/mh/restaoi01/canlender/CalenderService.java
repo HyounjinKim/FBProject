@@ -13,8 +13,8 @@ public class CalenderService {
 
 
     public List<String> findRecordPermonth(String id) {
-
-        List<String> records = calenderRepository.calendersql(id);
+        List<String> records = calenderRepository.calenderFKsql(id);
+        System.out.println(records);
         return records;
     }
 
