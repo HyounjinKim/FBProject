@@ -42,11 +42,11 @@ public class EatController {
         }
     }
         @PostMapping("/insert")
-        public Diet inserteat(@RequestBody Diet dite){
+        public ResponseEntity<Diet> inserteat(@RequestBody Diet dite){
             dite.setDdatetime(LocalDateTime.now());
             eatService.regist(dite);
 
-            return dite;
+            return ResponseEntity.status(HttpStatus.OK).body(dite);
 
 
     }

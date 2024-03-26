@@ -26,6 +26,7 @@ public class Record {
 
     private String id;
 
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime rdatetime;
 

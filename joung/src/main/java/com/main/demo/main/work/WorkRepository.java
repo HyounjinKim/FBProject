@@ -53,7 +53,6 @@ public interface WorkRepository extends JpaRepository< Record, String> {
 
 
 
-
 //    UPDATE Record
 //    SET emin = emin + 10
 //    WHERE id = 'ab001'

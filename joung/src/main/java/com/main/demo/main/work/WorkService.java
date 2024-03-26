@@ -27,13 +27,11 @@ public class WorkService {
         List<Integer> daytotal = workRepository.calories(id);
         //이번주 소모 칼로리
         int week = workRepository.findEMinById(id);
-
         LocalDate now = LocalDate.now();
         LocalDateTime endOfLastWeek = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY)).minusWeeks(1).atStartOfDay();
         LocalDateTime startOfLastWeek = endOfLastWeek.minusDays(6);
 //지난주 운동 정보
         int last = workRepository.findCalculatedEMinByLastWeekAndId(startOfLastWeek, endOfLastWeek, id);
-
         List<Record> list = new ArrayList<>();
         for(int i = 0; i <ename.size(); i++){
             list.add(Record.builder()
@@ -43,11 +41,9 @@ public class WorkService {
                     .lastwork(last)
                     .weekwork(week)
                     .build());
-
         }
         return list;
     }
-
     @Transactional
     public void delete(String id, String eName, String date) {
         if (eName != null) {
@@ -56,12 +52,33 @@ public class WorkService {
             workRepository.deleteByIdAndRdatetime(id, date);
         }
     }
-
-
     public Record regist(Record record) {
 
-            return  workRepository.save(record);
 
+
+        return  workRepository.save(record);
+    }
+
+    public void update(RecordDTO recordDTo, String rename, Integer retime) {
+        
+        if(recordDTo.getEname() != null){
+
+          if(retime != null && rename != null){
+           //운동 이름 운동 시간 바꾸기
+
+          } else if (retime == null) {
+              //운동 이름바꾸기
+
+          } else if (rename == null) {
+              //운동시간 바꾸기
+
+          }else {
+
+          }
+        }else {
+
+
+        }
 
 
     }
