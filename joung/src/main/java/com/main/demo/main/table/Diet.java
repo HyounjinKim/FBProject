@@ -29,11 +29,15 @@ public class Diet {
 
     private float dcalories;
 
-
+    //이번주 총 섭취 칼로리
     @Transient
     private Integer weekcalories;
+
+    //지난주 총 섭취 칼로리
     @Transient
     private Integer lastcalories;
+
+    //오늘 총 섭취 칼로리
     @Transient
     private int daycalories;
 

@@ -2,6 +2,8 @@ package com.main.demo.main.eat;
 
 
 import com.main.demo.main.table.Diet;
+import com.main.demo.main.table.DietDTO;
+import com.main.demo.main.table.Record;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -13,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Component
@@ -23,6 +26,7 @@ public class EatService {
 
     public List<Diet> Week(String id) {
 
+        //지난주
         LocalDate now = LocalDate.now();
         LocalDateTime endOfLastWeek = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY)).minusWeeks(1).atStartOfDay();
         LocalDateTime startOfLastWeek = endOfLastWeek.minusDays(6);
@@ -39,9 +43,11 @@ public class EatService {
         List<String> eat = eatRepository.name(id);
         Integer day = eatRepository.daycalories(id);
         List<Diet> list = new ArrayList<>();
+        //지난주 섭취 기록이 없을 경우
         if (last == null) {
             last = 0;
         }
+        //이번주 섭취 기록이 없을 경우
         if (week == null) {
             week = 0;
         }
@@ -49,6 +55,7 @@ public class EatService {
             day = 0;
         }
 
+        //오늘 섭취한 음식이 있는경우
         for (int i = 0; i < eat.size(); i++) {
             list.add(Diet.builder()
                     .weekcalories(last)
@@ -58,7 +65,7 @@ public class EatService {
                     .dname(eat.get(i))
                     .build());
         }
-
+//오늘 섭취한 음식이 없는경우
         if (eat.size() == 0) {
             list.add(Diet.builder()
                     .weekcalories(last)
@@ -67,21 +74,34 @@ public class EatService {
         }
 
         return list;
-}
-
-@Transactional
-public void delete(String id, String dName, String date) {
-
-    if (dName != null) {
-        eatRepository.deleteByIdAndEnameAndRdatetime(id, dName, date);
-    } else {
-        eatRepository.deleteByIdAndRdatetime(id, date);
     }
-}
 
-public Diet regist(Diet dite) {
-    return eatRepository.save(dite);
-}
+    @Transactional
+    public String delete(DietDTO dietDTO, String date) {
+
+        if (dietDTO.getDname() == null) {
+            List<Integer> list = eatRepository.selectday(dietDTO.getId(), date);
+            if (list.size() != 0) {
+                eatRepository.deleteByIdAndRdatetime(dietDTO.getId(), date);
+                return date + "의 기록의 삭제했습니다.";
+            } else {
+                return "작성하신 기록은 존재하지 않습니다.";
+            }
+        } else {
+            Optional<Diet> list = eatRepository.selectenameday(dietDTO.getId(), dietDTO.getDname(), date);
+            if (list.isPresent()) {
+                eatRepository.deleteByIdAndEnameAndRdatetime(dietDTO.getId(), dietDTO.getDname(), date);
+                return date + " " + dietDTO.getDname() + "의 기록의 삭제했습니다.";
+            } else {
+                return "작성하신 기록은 존재하지 않습니다.";
+            }
+
+        }
+    }
+
+    public Diet regist(Diet dite) {
+        return eatRepository.save(dite);
+    }
 }
 
 

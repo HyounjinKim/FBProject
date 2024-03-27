@@ -30,13 +30,19 @@ public class Record {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime rdatetime;
 
+    //이번주 기록
     @Transient
     private Integer weekwork;
+
+    //지난주 기록
     @Transient
     private Integer lastwork;
 
+    //오늘의 해당 운동 시간
     @Transient
     private int dayemin;
+
+    //오늘의 해당 운동의 총 칼로리
     @Transient
     private int daycalories;
 

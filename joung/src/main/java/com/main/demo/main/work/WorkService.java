@@ -35,13 +35,16 @@ public class WorkService {
         Integer last = workRepository.findCalculatedEMinByLastWeekAndId(startOfLastWeek, endOfLastWeek, id);
 
         List<Record> list = new ArrayList<>();
+        //지난주 운동기록이 없을 경우
         if (last == null) {
             last = 0;
 
         }
+        //이번주 운동기록이 없을 경우
         if (week == null) {
             week = 0;
         }
+        //오늘 운동한 기록이 있을 경우
         for (int i = 0; i < ename.size(); i++) {
             list.add(Record.builder()
                     .ename(ename.get(i))
@@ -51,6 +54,7 @@ public class WorkService {
                     .weekwork(week)
                     .build());
         }
+        //오늘 운동한 기록이 없을 경우
         if (ename.size() == 0) {
             list.add(Record.builder()
                     .lastwork(last)
@@ -61,19 +65,11 @@ public class WorkService {
         return list;
     }
 
-    @Transactional
-    public void delete(String id, String eName, String date) {
-        if (eName != null) {
-            workRepository.deleteByIdAndEnameAndRdatetime(id, eName, date);
-        } else {
-            workRepository.deleteByIdAndRdatetime(id, date);
-        }
-    }
 
     @Transactional
     public Record regist(Record record) {
 
-        Record dbrecord = workRepository.findByIdAndAndEname(record.getId(), record.getEname());
+        Record dbrecord = workRepository.findByIdAndEname(record.getId(), record.getEname());
 
         if (dbrecord == null) {
             return workRepository.save(record);
@@ -83,34 +79,54 @@ public class WorkService {
         }
     }
 
+    @Transactional
+    public void update(RecordDTO recordDTo, String rename, String retime) {
+        Record dbrecord = workRepository.findByIdAndEname(recordDTo.getId(), recordDTo.getEname());
 
-    public void update(RecordDTO recordDTo, String rename, Integer retime) {
-
-
-        if (recordDTo.getEname() != null) {
-            if (retime != null && rename != null) {
-                //운동 이름 운동 시간 바꾸기
-
-            } else if (retime == null) {
-                //운동 이름바꾸기
-
-            } else if (rename == null) {
-                //운동시간 바꾸기
-
-            } else {
-                //에러
-
+        if (dbrecord != null) {
+            if (recordDTo.getEname() != null) {
+                if (retime != null && rename != null) {
+                    workRepository.updateAll(recordDTo.getId(), recordDTo.getEname(), rename, retime);
+                    //운동 이름 운동 시간 바꾸기
+                } else if (retime == null) {
+                    //운동 이름바꾸기
+                    workRepository.updatname(recordDTo.getId(), recordDTo.getEname(), rename);
+                } else if (rename == null) {
+                    //운동시간 바꾸기
+                    workRepository.updattime(recordDTo.getId(), recordDTo.getEname(), retime);
+                } else {
+                    //운동 이름만적어서 에러
+                }
             }
         } else {
-            //운동명이 비었으니 에러
+            //유효성 검사해서 결과가 없을때
+        }
 
+    }
 
+    @Transactional
+    public String delete(RecordDTO recordDTO, String date) {
+
+        if (recordDTO.getEname() == null) {
+            List<Integer> list = workRepository.selectday(recordDTO.getId(), date);
+            if (list.size() != 0) {
+                workRepository.deleteByIdAndRdatetime(recordDTO.getId(), date);
+                return  date +" 의 기록을 삭제 했습니다.";
+            } else {
+               return "작성하신 기록은 존재하지 않습니다.";
+            }
+        } else {
+            Optional<Record> list = workRepository.selectenameday(recordDTO.getId(), recordDTO.getEname(), date);
+            if (list.isPresent()) {
+                workRepository.deleteByIdAndEnameAndRdatetime(recordDTO.getId(), recordDTO.getEname(), date);
+                return date + " " +recordDTO.getEname()+" 의 기록을 삭제 했습니다.";
+            } else {
+                return "작성하신 기록은 존재하지 않습니다.";
+            }
         }
     }
+
 }
-
-
-
 
 
 

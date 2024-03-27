@@ -30,27 +30,22 @@ public class EatController {
     @DeleteMapping("")
     public String Deleteat(@RequestBody Map<String, String> requestBody) {
         DietDTO dietDTO = new DietDTO();
+        String id = requestBody.get("id");
+        String dname = requestBody.get("dname");
 
-        dietDTO.setId(requestBody.get("id"));
-        dietDTO.setDname(requestBody.get("dname"));
+        dietDTO.setId(id);
+        dietDTO.setDname(dname);
         String date = requestBody.get("date");
 
-        eatService.delete(dietDTO.getId(), dietDTO.getDname(), date);
+    String text =   eatService.delete(dietDTO, date);
 
-        if (dietDTO.getDname() != null) {
-            return date + " " + dietDTO.getDname() + " 의 운동정보가 삭제됬습니다.";
-        } else {
-            return date + " 의 모든 운동정보가 삭제됬습니다.";
-        }
+    return text;
     }
         @PostMapping("/insert")
         public ResponseEntity<Diet> inserteat(@RequestBody Diet dite){
             dite.setDdatetime(LocalDateTime.now());
             eatService.regist(dite);
-
             return ResponseEntity.status(HttpStatus.OK).body(dite);
-
-
     }
 
 }
