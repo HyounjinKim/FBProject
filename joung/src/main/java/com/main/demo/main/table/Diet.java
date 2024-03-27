@@ -31,9 +31,9 @@ public class Diet {
 
 
     @Transient
-    private int weekcalories;
+    private Integer weekcalories;
     @Transient
-    private int lastcalories;
+    private Integer lastcalories;
     @Transient
     private int daycalories;
 

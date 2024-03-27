@@ -31,9 +31,9 @@ public class Record {
     private LocalDateTime rdatetime;
 
     @Transient
-    private int weekwork;
+    private Integer weekwork;
     @Transient
-    private int lastwork;
+    private Integer lastwork;
 
     @Transient
     private int dayemin;

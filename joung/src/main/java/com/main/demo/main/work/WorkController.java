@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -23,8 +24,10 @@ public class WorkController {
     @PostMapping("")
     public ResponseEntity<List<Record>> week(@RequestBody RecordDTO recordDTO) {
         List<Record> list = workService.Week(recordDTO.getId());
+        System.out.println(list);
 
-        return ResponseEntity.status(HttpStatus.OK).body(list);
+            return ResponseEntity.status(HttpStatus.OK).body(list);
+
     }
 
     @DeleteMapping("")
@@ -43,7 +46,10 @@ public class WorkController {
     }
     @PostMapping("/insert")
     public ResponseEntity<Record> insertwork(@RequestBody Record record){
-        record.setRdatetime(LocalDateTime.now());
+        ZonedDateTime now = ZonedDateTime.now();
+        record.setRdatetime(now.toLocalDateTime());
+
+        System.out.println(now);
 
           workService.regist(record);
         System.out.println(record.getRdatetime());
@@ -57,7 +63,5 @@ public class WorkController {
 
       workService.update(recordDTo, rename, retime);
     }
-
-
 
 }

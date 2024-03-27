@@ -20,8 +20,10 @@ public class EatController {
     private final EatService eatService;
     @PostMapping("")
     public ResponseEntity<List<Diet>> week(@RequestBody DietDTO dietDTO) {
-        List<Diet> week = eatService.Week(dietDTO.getId());
-        return ResponseEntity.status(HttpStatus.OK).body(week);
+        List<Diet> list = eatService.Week(dietDTO.getId());
+
+            return ResponseEntity.status(HttpStatus.OK).body(list);
+
     }
 
 

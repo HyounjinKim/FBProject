@@ -19,10 +19,10 @@ public interface EatRepository extends JpaRepository<Diet, String> {
 
     //이번주 섭취 칼로리량
     @Query("SELECT SUM(dcalories) FROM Diet WHERE YEARWEEK(ddatetime) = YEARWEEK(NOW()) AND id = :id")
-    int findDcById(@Param("id") String id);
+    Integer findDcById(@Param("id") String id);
     //지난주 섭취 칼로리
     @Query("SELECT SUM(dcalories) FROM Diet WHERE ddatetime BETWEEN :startDate AND :endDate AND id = :id")
-    int findCalculatedCaloriesByLastWeekAndId(
+    Integer findCalculatedCaloriesByLastWeekAndId(
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate,
             @Param("id") String id);
@@ -35,7 +35,7 @@ public interface EatRepository extends JpaRepository<Diet, String> {
     List<Integer> calories(@Param("id") String id);
 
     @Query("SELECT SUM(dcalories) FROM Diet  WHERE YEARWEEK(ddatetime) = YEARWEEK(NOW())AND DATE(ddatetime) = CURDATE() AND id = :id")
-    int daycalories(@Param("id") String id);
+    Integer daycalories(@Param("id") String id);
 
 
 
