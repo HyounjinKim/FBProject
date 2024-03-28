@@ -19,6 +19,12 @@ public class RecordDTO {
     private String id;
 
     private LocalDateTime rdatetime;
+
+    private String rename;
+
+    private Integer retime;
+
+
     public static Record of(RecordDTO recordDTo) {
         Record record = new Record();
         record.setEname(recordDTo.getEname());

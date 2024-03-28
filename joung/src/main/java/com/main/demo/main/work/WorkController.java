@@ -25,7 +25,6 @@ public class WorkController {
         List<Record> list = workService.Week(recordDTO.getId());
 
         return ResponseEntity.status(HttpStatus.OK).body(list);
-
     }
 
     @DeleteMapping("")
@@ -37,10 +36,9 @@ public class WorkController {
         String date = requestBody.get("date");
         recordDTO.setId(id);
         recordDTO.setEname(ename);
-       String text = workService.delete(recordDTO, date);
+        String text = workService.delete(recordDTO, date);
 
         return text;
-
     }
 
     @PostMapping("/insert")
@@ -52,11 +50,10 @@ public class WorkController {
     }
 
     @PutMapping("")
-    public void updatework(@RequestBody Map<String, String> requestBody) {
-        RecordDTO recordDTO = new RecordDTO();
-        String rename = requestBody.get("rename");
-        String retime = requestBody.get("retime");
-
-        workService.update(recordDTO, rename, retime);
+    public String updatework(@RequestBody RecordDTO recordDTO) {
+        if(recordDTO.getRename() == "")
+            recordDTO.setEname(null);
+       String text =  workService.update(recordDTO);
+       return text;
     }
 }

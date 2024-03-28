@@ -80,28 +80,32 @@ public class WorkService {
     }
 
     @Transactional
-    public void update(RecordDTO recordDTo, String rename, String retime) {
+    public String update(RecordDTO recordDTo) {
         Record dbrecord = workRepository.findByIdAndEname(recordDTo.getId(), recordDTo.getEname());
-
         if (dbrecord != null) {
             if (recordDTo.getEname() != null) {
-                if (retime != null && rename != null) {
-                    workRepository.updateAll(recordDTo.getId(), recordDTo.getEname(), rename, retime);
+                if (recordDTo.getRetime() != null && recordDTo.getRename() != null) {
+                    workRepository.updateAll(recordDTo.getId(), recordDTo.getEname(), recordDTo.getRename(),recordDTo.getRetime());
+                    return "해당 운동명과 시간이 변경 되었습니다.";
                     //운동 이름 운동 시간 바꾸기
-                } else if (retime == null) {
+                } else if (recordDTo.getRetime() == null) {
                     //운동 이름바꾸기
-                    workRepository.updatname(recordDTo.getId(), recordDTo.getEname(), rename);
-                } else if (rename == null) {
+                    workRepository.updatname(recordDTo.getId(), recordDTo.getEname(), recordDTo.getRename());
+                    return "해당 운동의 이름이 변경되었습니다.";
+                } else if (recordDTo.getRename()  == null) {
                     //운동시간 바꾸기
-                    workRepository.updattime(recordDTo.getId(), recordDTo.getEname(), retime);
+                    workRepository.updattime(recordDTo.getId(), recordDTo.getEname(), recordDTo.getRetime());
+                    return "해당 운동의 시간이 변경되었습니다.";
                 } else {
                     //운동 이름만적어서 에러
+                    return "변경하실 내용을 작성해 주세요.";
                 }
             }
         } else {
             //유효성 검사해서 결과가 없을때
+            return "작성하신 기록은 존재하지 않습니다.";
         }
-
+        return "입력오류";
     }
 
     @Transactional

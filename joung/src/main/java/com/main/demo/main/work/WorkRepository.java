@@ -76,7 +76,7 @@ public interface WorkRepository extends JpaRepository<Record, String> {
     @Transactional
     @Modifying
     @Query("UPDATE Record SET ename = :rename, emin = :retime WHERE id = :id AND ename = :ename AND DATE(rdatetime) = CURDATE()")
-    void updateAll(@Param("id") String id, @Param("ename") String ename, @Param("rename") String rename, @Param("retime") String retime);
+    void updateAll(@Param("id") String id, @Param("ename") String ename, @Param("rename") String rename, @Param("retime") Integer retime);
 
     //운동 이름 바꾸기
     @Transactional
@@ -88,7 +88,7 @@ public interface WorkRepository extends JpaRepository<Record, String> {
     @Transactional
     @Modifying
     @Query("UPDATE Record SET emin = :retime WHERE id = :id AND ename = :ename AND DATE(rdatetime) = CURDATE()")
-    void updattime(@Param("id") String id, @Param("ename") String ename, @Param("retime") String retime);
+    void updattime(@Param("id") String id, @Param("ename") String ename, @Param("retime") Integer retime);
 
     //유효성 검사
     Record findByIdAndEname(String id, String ename);
