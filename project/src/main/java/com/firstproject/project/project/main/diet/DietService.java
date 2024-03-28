@@ -54,8 +54,8 @@ public class DietService {
         //오늘 섭취한 음식이 있는경우
         for (int i = 0; i < eat.size(); i++) {
             list.add(Diet.builder()
-                    .weekcalories(last)
-                    .lastcalories(week)
+                    .weekcalories(week)
+                    .lastcalories(last)
                     .daycalories(day)
                     .dcalories(daycalories.get(i))
                     .dname(eat.get(i))
@@ -64,8 +64,8 @@ public class DietService {
 //오늘 섭취한 음식이 없는경우
         if (eat.size() == 0) {
             list.add(Diet.builder()
-                    .weekcalories(last)
-                    .lastcalories(week)
+                    .weekcalories(week)
+                    .lastcalories(last)
                     .build());
         }
 
@@ -73,28 +73,26 @@ public class DietService {
     }
 
     @Transactional
-    public String delete(DietDto dietDto, String date) {
+    public String delete(DietDto dietDto) {
 
         if (dietDto.getDname() == null) {
-            List<Integer> list = dietRepository.selectday(dietDto.getId(), date);
+            List<Integer> list = dietRepository.selectday(dietDto.getId(), dietDto.getDate());
             if (list.size() != 0) {
-                dietRepository.deleteByIdAndRdatetime(dietDto.getId(), date);
-                return date + "의 기록의 삭제했습니다.";
+                dietRepository.deleteByIdAndRdatetime(dietDto.getId(), dietDto.getDate());
+                return dietDto.getDate() + "의 기록의 삭제했습니다.";
             } else {
                 return "작성하신 기록은 존재하지 않습니다.";
             }
         } else {
-            Optional<Diet> list = dietRepository.selectenameday(dietDto.getId(), dietDto.getDname(), date);
+            Optional<Diet> list = dietRepository.selectenameday(dietDto.getId(), dietDto.getDname(), dietDto.getDate());
             if (list.isPresent()) {
-                dietRepository.deleteByIdAndEnameAndRdatetime(dietDto.getId(), dietDto.getDname(), date);
-                return date + " " + dietDto.getDname() + "의 기록의 삭제했습니다.";
+                dietRepository.deleteByIdAndEnameAndRdatetime(dietDto.getId(), dietDto.getDname(), dietDto.getDate());
+                return dietDto.getDate() + " " + dietDto.getDname() + "의 기록의 삭제했습니다.";
             } else {
                 return "작성하신 기록은 존재하지 않습니다.";
             }
-
         }
     }
-
     public Diet regist(Diet dite) {
         return dietRepository.save(dite);
     }

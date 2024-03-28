@@ -1,6 +1,7 @@
 package com.firstproject.project.project.main.record;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -16,17 +17,32 @@ public class RecordDto {
     @Schema(title = "기본키")
     private int rindex;
 
-    @NotBlank
+//    @NotBlank
     @Schema(title = "운동한시간(분)")
     private int emin;
-    @NotBlank
+
+//    @NotBlank
     @Schema(title = "운동이름")
     private String ename;
-    @NotBlank
+
+//    @NotBlank
     @Schema(title = "사용자 아이디")
     private String id;
+
     @Schema(title = "운동한 날짜")
     private LocalDateTime rdatetime;
+
+    @Schema(title = "변경시 변경할 이름")
+    private String rename;
+
+    @Schema(title = "변경시 변경할 운동시간(분)")
+    private int retime;
+
+    @Schema(title = "삭제시 삭제할 시간")
+    private String date;
+
+
+
     public static Record of(RecordDto recordDTo) {
         Record record = new Record();
         record.setEname(recordDTo.getEname());

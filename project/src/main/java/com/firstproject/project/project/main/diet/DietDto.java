@@ -1,6 +1,7 @@
 package com.firstproject.project.project.main.diet;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -28,7 +29,17 @@ public class DietDto {
     @Schema(title = "음식 칼로리")
     private float dcalories;
 
+    @Schema(title = "이번주 총 섭취 칼로리")
+    private Integer weekcalories;
 
+    @Schema(title = "지난주 총 섭취 칼로리")
+    private Integer lastcalories;
+
+    @Schema(title = "오늘 총 섭취 칼로리")
+    private int daycalories;
+
+    @Schema(title = "삭제시 삭제할 시간")
+    private String date;
 
     public Diet of(DietDto dietDTO) {
         Diet diet = new Diet();

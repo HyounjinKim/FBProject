@@ -3,6 +3,7 @@ package com.firstproject.project.project.main.record;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,15 +31,10 @@ public class RecordController {
 
     @Operation(summary = "운동기록 삭제")
     @DeleteMapping("")
-    public String Deletework(@RequestBody Map<String, String> requestBody) {
+    public String Deletework(@RequestBody RecordDto recordDto) {
 
-        RecordDto recordDto = new RecordDto();
-        String id = requestBody.get("id");
-        String ename = requestBody.get("ename");
-        String date = requestBody.get("date");
-        recordDto.setId(id);
-        recordDto.setEname(ename);
-        String text = recordService.delete(recordDto, date);
+
+        String text = recordService.delete(recordDto);
 
         return text;
 
@@ -48,18 +44,29 @@ public class RecordController {
     @PostMapping("/insert")
     public ResponseEntity<Record> insertwork(@RequestBody RecordDto recordDto) {
         recordDto.setRdatetime(LocalDateTime.now());
-        Record record =  recordService.regist(recordDto);
-
-        return ResponseEntity.status(HttpStatus.OK).body(record);
+        ModelMapper mapper = new ModelMapper();
+        Record record = mapper.map(recordDto, Record.class);
+        Record dbrecord =  recordService.regist(record);
+        return ResponseEntity.status(HttpStatus.OK).body(dbrecord);
     }
 
     @Operation(summary = "운동기록 수정")
     @PutMapping("")
-    public void updatework(@RequestBody Map<String, String> requestBody) {
-        RecordDto recordDto = new RecordDto();
-        String rename = requestBody.get("rename");
-        String retime = requestBody.get("retime");
+    public String updatework(@RequestBody RecordDto recordDto) {
+        // rename이 빈 문자열인 경우 null로 설정
+        if ("".equals(recordDto.getRename())) {
+            recordDto.setRename(null);
+        }
+        // retime이 null인 경우 0으로 설정
+        if ("".equals(recordDto.getRetime())) {
+            recordDto.setRetime(0);
+        }
 
-        recordService.update(recordDto, rename, retime);
+        ModelMapper mapper = new ModelMapper();
+        Record record = mapper.map(recordDto, Record.class);
+
+        // null 체크 후 update 메서드 호출
+        String text =  recordService.update(record);
+        return text;
     }
 }

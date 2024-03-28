@@ -30,7 +30,7 @@ public interface RecordRepository extends JpaRepository<Record, String> {
 
     //오늘
     // 운동명 가져오기
-    @Query("SELECT a.ename FROM Record a JOIN Exercise b ON a.ename = b.ename WHERE YEARWEEK(a.rdatetime) = YEARWEEK(NOW()) AND DATE(a.rdatetime) = CURDATE() AND a.id = :id GROUP BY a.ename ")
+    @Query("SELECT a.ename FROM Record a JOIN Exercise b ON a.ename = b.ename WHERE YEARWEEK(a.rdatetime) = YEARWEEK(NOW()) AND DATE(a.rdatetime) = CURDATE() AND a.id = :id GROUP BY a.ename")
     List<String> name(@Param("id") String id);
 
     //운동시간
@@ -40,7 +40,6 @@ public interface RecordRepository extends JpaRepository<Record, String> {
     //소모칼로리
     @Query("SELECT SUM(a.emin * b.ecalories) AS total_calories FROM Record a JOIN Exercise b ON a.ename = b.ename WHERE YEARWEEK(a.rdatetime) = YEARWEEK(NOW()) AND DATE(a.rdatetime) = CURDATE() AND a.id = :id GROUP BY a.ename ")
     List<Integer> calories(@Param("id") String id);
-
 
 
     // 해당 날짜의 운동 정보 삭제
@@ -63,32 +62,65 @@ public interface RecordRepository extends JpaRepository<Record, String> {
     List<Integer> selectday(@Param("id") String id, @Param("rdatetime") String rdatetime);
 
 
-
-
     //이미 있는 운동의 경우 그 운동에 시간 추가
     @Transactional
     @Modifying
     @Query("UPDATE Record SET emin = emin + :emin WHERE id = :id  AND ename = :ename AND DATE(rdatetime) = CURDATE()")
     void updateRecord(@Param("id") String id, @Param("ename") String ename, @Param("emin") int emin);
 
+
+    //변경시 있는 운동명인지 확인
+    @Query("SELECT ename FROM Record WHERE id = :id AND ename = :rename AND DATE(rdatetime) = CURDATE()")
+    Optional<Record> renametest(@Param("id") String id, @Param("rename") String rename);
+
     //운동 이름 시간 바꾸기
     @Transactional
     @Modifying
     @Query("UPDATE Record SET ename = :rename, emin = :retime WHERE id = :id AND ename = :ename AND DATE(rdatetime) = CURDATE()")
-    void updateAll(@Param("id") String id, @Param("ename") String ename, @Param("rename") String rename, @Param("retime") String retime);
+    void updateAll(@Param("id") String id, @Param("ename") String ename, @Param("rename") String rename, @Param("retime") int retime);
 
     //운동 이름 바꾸기
     @Transactional
     @Modifying
-    @Query("UPDATE Record SET ename = :rename WHERE id = :id AND ename = :ename AND DATE(rdatetime) = CURDATE()")
-    void updatname(@Param("id") String id, @Param("ename") String ename, @Param("rename") String rename);
+    @Query("UPDATE Record SET ename = :newName WHERE id = :id AND ename = :oldName AND DATE(rdatetime) = CURDATE()")
+    void updateEname(@Param("id") String id, @Param("oldName") String oldName, @Param("newName") String newName);
+
+
 
     //운동 시간바꾸기
     @Transactional
     @Modifying
     @Query("UPDATE Record SET emin = :retime WHERE id = :id AND ename = :ename AND DATE(rdatetime) = CURDATE()")
-    void updattime(@Param("id") String id, @Param("ename") String ename, @Param("retime") String retime);
+    void updattime(@Param("id") String id, @Param("ename") String ename, @Param("retime") int retime);
+
+    //이미 있는 운동명으로 변경시 운동합치기
+    //운동명 변경시 운동합치기
+    @Modifying
+    @Query("UPDATE Record SET emin = emin + :additionalTime WHERE id = :id AND ename = :rename AND DATE(rdatetime) = CURDATE()")
+    void updateExistingEnameWithTime(@Param("id") String id, @Param("rename") String rename, @Param("additionalTime") int additionalTime);
+    //운동명 바꿀면서 합쳐질때 운동시간을 미리 저장하는 쿼리문
+    @Query("SELECT emin FROM Record WHERE id = :id AND ename = :ename AND DATE(rdatetime) = CURDATE()")
+    int emin(@Param("id") String id, @Param("ename") String ename);
+
+    //운동명만 바꾸기
+    @Modifying
+    @Query("UPDATE Record SET ename = :newName WHERE id = :id AND ename = :existingName AND DATE(rdatetime) = CURDATE()")
+    void updateExistingEnameWithTime(@Param("id") String id, @Param("existingName") String existingName, @Param("newName") String newName);
+
+    //이미 있는 운동명으로 변경 변경된 운동시간
+    @Transactional
+    @Modifying
+    @Query("UPDATE Record SET emin = emin + :retime WHERE id = :id  AND ename = :rename AND DATE(rdatetime) = CURDATE()")
+    void updaterenameretime(@Param("id") String id, @Param("rename") String rename, @Param("retime") int retime);
+
+    //운동명  변경시 변경전 운동기록 삭제
+    @Transactional
+    @Modifying
+    @Query("DELETE From Record  WHERE id = :id  AND ename = :ename AND DATE(rdatetime) = CURDATE()")
+    void deleteoverlap(@Param("id") String id, @Param("ename") String ename);
+
 
     //유효성 검사
-    Record findByIdAndEname(String id, String ename);
+    @Query("SELECT r FROM Record r WHERE r.id = :id AND r.ename = :ename AND DATE(r.rdatetime) = CURDATE()")
+    Record findByIdAndEname(@Param("id") String id, @Param("ename") String ename);
 }
