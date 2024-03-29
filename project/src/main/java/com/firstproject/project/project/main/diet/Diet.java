@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Diet")
+@Table(name = "diet")
 @Schema(name = "먹은음식 정보")
 public class Diet {
 
@@ -53,10 +53,19 @@ public class Diet {
 
     @Transient
     @Schema(title = "오늘 총 섭취 칼로리")
-    private int daycalories;
+    private float daycalories;
 
     @Transient
     @Schema(title = "삭제시 삭제할 시간")
     private String date;
+
+
+    @Transient
+    @Schema(title = "변경시 변경할 이름")
+    private String rename;
+
+    @Transient
+    @Schema(title = "변경시 변경할 칼로리")
+    private float recalories;
 
 }

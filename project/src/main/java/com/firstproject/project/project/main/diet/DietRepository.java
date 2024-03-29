@@ -1,5 +1,6 @@
 package com.firstproject.project.project.main.diet;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -50,8 +51,9 @@ public interface DietRepository extends JpaRepository<Diet, String> {
     @Query("DELETE FROM Diet WHERE id = :id AND DATE(ddatetime) = DATE(:date)")
     void deleteByIdAndRdatetime(String id, String date);
 
+
     //유효성 검사
-    //해당날짜의 운동이 있는지
+    //해당날짜의 음식이 있는지
     // 이미 있는 음식명인지 확인
     @Query("SELECT dcalories FROM Diet WHERE id = :id AND dname = :dname AND DATE_FORMAT(ddatetime, '%Y-%m-%d') = :ddatetime")
     Optional<Diet> selectenameday(@Param("id") String id, @Param("dname") String dname, @Param("ddatetime") String date);
@@ -61,4 +63,59 @@ public interface DietRepository extends JpaRepository<Diet, String> {
     List<Integer> selectday(@Param("id") String id, @Param("ddatetime") String date);
 
 
+    //이미 있는 음식명인지 확인
+    @Query("SELECT d FROM Diet d WHERE d.id = :id AND d.dname = :dname AND DATE(d.ddatetime) = CURDATE()")
+    Diet findByIdAndDname(@Param("id") String id, @Param("dname") String dname);
+
+    //이미 있는 음식명인 경우 작성한 칼로리 합치기
+    @Transactional
+    @Modifying
+    @Query("UPDATE Diet SET dcalories = dcalories + :dcalorie WHERE id = :id  AND dname = :dname AND DATE(ddatetime) = CURDATE()")
+    void updatedite(@Param("id") String id, @Param("dname") String dname, @Param("dcalorie") float dcalorie);
+
+
+    //변경시 이미 있는 음식명인지 확인
+    @Query("SELECT dname FROM Diet WHERE id = :id AND dname = :rename AND DATE(ddatetime) = CURDATE()")
+    Optional<Diet> renametest(@Param("id") String id, @Param("rename") String rename);
+
+    //이미 있는 음식명으로 변경시 바꾸기전 음식의 칼로리추출
+    @Query("SELECT dcalories FROM Diet WHERE id = :id AND dname = :dname AND DATE(ddatetime) = CURDATE()")
+    int thiscalories(@Param("id") String id, @Param("dname") String dname);
+
+    //이미 있는 음식명으로 변경시 칼로리를 더해주기만
+    @Transactional
+    @Modifying
+    @Query("UPDATE Diet SET dcalories = dcalories+ :sumcalories WHERE id = :id AND dname = :rename AND DATE(ddatetime) = CURDATE()")
+    void updateExistingDnameWithsumCalories(@Param("id") String id, @Param("rename") String newName, @Param("sumcalories") int sumcalories);
+
+    //이미 있는 음식명으로 변경시  변경전 음식기록 삭제
+    @Transactional
+    @Modifying
+    @Query("DELETE From Diet  WHERE id = :id  AND dname = :dname AND DATE(ddatetime) = CURDATE()")
+    void deleteoverlap(@Param("id") String id, @Param("dname") String dname);
+
+    //음식명만 바꾸기
+    @Transactional
+    @Modifying
+    @Query("UPDATE Diet SET dname = :rename WHERE id = :id AND dname = :dname AND DATE(ddatetime) = CURDATE()")
+    void updateExistingEnameWithTime(@Param("id") String id, @Param("dname") String dname, @Param("rename") String newName);
+
+
+    //음식 칼로리만 변경
+    @Transactional
+    @Modifying
+    @Query("UPDATE Diet SET dcalories = :recalories WHERE id = :id AND dname = :dname AND DATE(ddatetime) = CURDATE()")
+    void updatcalories(@Param("id") String id, @Param("dname") String dname, @Param("recalories") float recalories);
+
+    //이미 있는 음식인 경우 칼로리 합치기
+    @Transactional
+    @Modifying
+    @Query("UPDATE Diet SET dcalories = dcalories + :recalories WHERE id = :id  AND dname = :rename AND DATE(ddatetime) = CURDATE()")
+    void updaterenamerecalories(@Param("id")String id, @Param("rename")String newName, @Param("recalories")float recalories);
+
+    //음식명 칼로리 변경
+    @Transactional
+    @Modifying
+    @Query("UPDATE Diet SET dname = :rename, dcalories = :recalories WHERE id = :id AND dname = :dname AND DATE(ddatetime) = CURDATE()")
+    void updateAll(@Param("id")String id, @Param("dname")String dname, @Param("rename")String newName, @Param("recalories")float newCalories);
 }

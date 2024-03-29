@@ -61,7 +61,6 @@ public interface RecordRepository extends JpaRepository<Record, String> {
     @Query("SELECT emin FROM Record WHERE id = :id AND DATE_FORMAT(rdatetime, '%Y-%m-%d') = :rdatetime")
     List<Integer> selectday(@Param("id") String id, @Param("rdatetime") String rdatetime);
 
-
     //이미 있는 운동의 경우 그 운동에 시간 추가
     @Transactional
     @Modifying

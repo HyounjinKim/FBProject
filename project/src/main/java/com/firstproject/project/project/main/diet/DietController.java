@@ -35,6 +35,9 @@ public class DietController {
     @Operation(summary = "음식기록 삭제")
     @DeleteMapping("")
     public String Deleteat(@RequestBody DietDto dietDto) {
+        if ("".equals(dietDto.getDname())) {
+            dietDto.setDate(null);
+        }
 
         String text =   dietService.delete(dietDto);
 
@@ -47,13 +50,29 @@ public class DietController {
         dietDto.setDdatetime(LocalDateTime.now());
         ModelMapper mapper = new ModelMapper();
        Diet diet = mapper.map(dietDto, Diet.class);
-        dietService.regist(diet);
-        return ResponseEntity.status(HttpStatus.OK).body(diet);
+        Diet dbdiet =  dietService.regist(diet);
+        return ResponseEntity.status(HttpStatus.OK).body(dbdiet);
     }
+
+
     @Operation(summary = "음식기록 수정")
     @PutMapping("")
-    public void updatediet(@RequestBody DietDto dietDto){
+    public String updatediet(@RequestBody DietDto dietDto){
+        // rename이 빈 문자열인 경우 null로 설정
+        if ("".equals(dietDto.getRename())) {
+            dietDto.setRename(null);
+        }
+        // Recalories이 null인 경우 0으로 설정
+        if ("".equals(dietDto.getRecalories())) {
+            dietDto.setRecalories(0);
+        }
 
+        ModelMapper mapper = new ModelMapper();
+       Diet diet = mapper.map(dietDto, Diet.class);
+
+        // null 체크 후 update 메서드 호출
+        String text =  dietService.update(diet);
+        return text;
 
     }
 

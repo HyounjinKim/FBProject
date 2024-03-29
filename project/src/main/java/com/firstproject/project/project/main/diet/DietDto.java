@@ -17,15 +17,15 @@ public class DietDto {
 
     @Schema(title = "기본키")
     private int didx;
-    @NotBlank
+//    @NotBlank
     @Schema(title = "사용자 아이디")
     private String id;
-    @NotBlank
+//    @NotBlank
     @Schema(title = "음식이름")
     private String dname;
     @Schema(title = "음식먹은 날짜")
     private LocalDateTime ddatetime;
-    @NotBlank
+//    @NotBlank
     @Schema(title = "음식 칼로리")
     private float dcalories;
 
@@ -40,6 +40,12 @@ public class DietDto {
 
     @Schema(title = "삭제시 삭제할 시간")
     private String date;
+
+    @Schema(title = "변경시 변경할 이름")
+    private String rename;
+
+    @Schema(title = "변경시 변경할 칼로리")
+    private int recalories;
 
     public Diet of(DietDto dietDTO) {
         Diet diet = new Diet();

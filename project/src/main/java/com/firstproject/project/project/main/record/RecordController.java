@@ -32,7 +32,9 @@ public class RecordController {
     @Operation(summary = "운동기록 삭제")
     @DeleteMapping("")
     public String Deletework(@RequestBody RecordDto recordDto) {
-
+        if ("".equals(recordDto.getEname())) {
+            recordDto.setDate(null);
+        }
 
         String text = recordService.delete(recordDto);
 
