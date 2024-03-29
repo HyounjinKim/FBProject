@@ -75,7 +75,7 @@ public class DietService {
     @Transactional
     public String delete(DietDto dietDto) {
 
-        if (dietDto.getDname() == null) {
+        if (dietDto.getDname().equals("")) {
             List<Integer> list = dietRepository.selectday(dietDto.getId(), dietDto.getDate());
             if (list.size() != 0) {
                 dietRepository.deleteByIdAndRdatetime(dietDto.getId(), dietDto.getDate());

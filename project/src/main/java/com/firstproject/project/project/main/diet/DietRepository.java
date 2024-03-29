@@ -36,17 +36,20 @@ public interface DietRepository extends JpaRepository<Diet, String> {
     @Query("SELECT dcalories FROM Diet WHERE YEARWEEK(ddatetime) = YEARWEEK(NOW())AND DATE(ddatetime) = CURDATE() AND id = :id")
     List<Integer> calories(@Param("id") String id);
 
+    //오늘 총 섭취 칼로리
     @Query("SELECT SUM(dcalories) FROM Diet  WHERE YEARWEEK(ddatetime) = YEARWEEK(NOW())AND DATE(ddatetime) = CURDATE() AND id = :id")
     Integer daycalories(@Param("id") String id);
 
 
     //해당 날짜의 섭취 음식 정보 삭제
+    @Transactional
     @Modifying
     @Query("DELETE FROM Diet WHERE id = :id AND dname = :dname AND DATE(ddatetime) = DATE(:date)")
     void deleteByIdAndEnameAndRdatetime(@Param("id")String id, @Param("dname")String dname, @Param("date")String date);
 
 
     //해당 날짜 삭제
+    @Transactional
     @Modifying
     @Query("DELETE FROM Diet WHERE id = :id AND DATE(ddatetime) = DATE(:date)")
     void deleteByIdAndRdatetime(@Param("id")String id,@Param("date") String date);

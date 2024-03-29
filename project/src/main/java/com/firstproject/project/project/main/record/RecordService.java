@@ -131,7 +131,7 @@ public class RecordService {
     @Transactional
     public String delete(RecordDto recordDTO) {
 
-        if (recordDTO.getEname() == null) {
+        if (recordDTO.getEname().equals("")) {
             List<Integer> list = recordRepository.selectday(recordDTO.getId(), recordDTO.getDate());
             if (list.size() != 0) {
                 recordRepository.deleteByIdAndRdatetime(recordDTO.getId(), recordDTO.getDate());

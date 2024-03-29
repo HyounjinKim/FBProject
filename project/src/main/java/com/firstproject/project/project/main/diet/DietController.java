@@ -35,9 +35,6 @@ public class DietController {
     @Operation(summary = "음식기록 삭제")
     @DeleteMapping("")
     public String Deleteat(@RequestBody DietDto dietDto) {
-        if ("".equals(dietDto.getDname())) {
-            dietDto.setDate(null);
-        }
         String text = dietService.delete(dietDto);
         return text;
     }
