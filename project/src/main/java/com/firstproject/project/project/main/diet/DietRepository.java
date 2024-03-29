@@ -43,13 +43,13 @@ public interface DietRepository extends JpaRepository<Diet, String> {
     //해당 날짜의 섭취 음식 정보 삭제
     @Modifying
     @Query("DELETE FROM Diet WHERE id = :id AND dname = :dname AND DATE(ddatetime) = DATE(:date)")
-    void deleteByIdAndEnameAndRdatetime(String id, String dname, String date);
+    void deleteByIdAndEnameAndRdatetime(@Param("id")String id, @Param("dname")String dname, @Param("date")String date);
 
 
     //해당 날짜 삭제
     @Modifying
     @Query("DELETE FROM Diet WHERE id = :id AND DATE(ddatetime) = DATE(:date)")
-    void deleteByIdAndRdatetime(String id, String date);
+    void deleteByIdAndRdatetime(@Param("id")String id,@Param("date") String date);
 
 
     //유효성 검사
@@ -99,7 +99,6 @@ public interface DietRepository extends JpaRepository<Diet, String> {
     @Modifying
     @Query("UPDATE Diet SET dname = :rename WHERE id = :id AND dname = :dname AND DATE(ddatetime) = CURDATE()")
     void updateExistingEnameWithTime(@Param("id") String id, @Param("dname") String dname, @Param("rename") String newName);
-
 
     //음식 칼로리만 변경
     @Transactional

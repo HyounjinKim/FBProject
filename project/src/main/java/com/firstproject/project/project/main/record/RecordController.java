@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,11 +34,8 @@ public class RecordController {
         if ("".equals(recordDto.getEname())) {
             recordDto.setDate(null);
         }
-
         String text = recordService.delete(recordDto);
-
         return text;
-
     }
 
     @Operation(summary = "운동기록 추가")
@@ -67,7 +63,6 @@ public class RecordController {
         ModelMapper mapper = new ModelMapper();
         Record record = mapper.map(recordDto, Record.class);
 
-        // null 체크 후 update 메서드 호출
         String text =  recordService.update(record);
         return text;
     }

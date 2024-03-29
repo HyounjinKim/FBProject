@@ -114,44 +114,42 @@ public class DietService {
         // 운동 기록이 존재하는 경우
         if (dbdiet != null) {
             // 새로운 운동 이름과 칼로리를 받아옴
-            String newName = diet.getRename();
-            float newCalories = diet.getRecalories();
 
             // 새로운 음식 이름과 칼로리 모두 있는 경우
-            if (newName != null && newCalories != 0) {
+            if (diet.getRename() != null && diet.getRecalories() != 0) {
                 // 새로운 음식 이름이 이미 존재하는 경우
-                Optional<Diet> testname = dietRepository.renametest(diet.getId(), newName);
+                Optional<Diet> testname = dietRepository.renametest(diet.getId(), diet.getRename());
                 if (testname.isPresent()) {
                     // 이미 있는 음식이면 합치기
-                    dietRepository.updaterenamerecalories(diet.getId(), newName, newCalories);
+                    dietRepository.updaterenamerecalories(diet.getId(), diet.getRename(), diet.getRecalories());
                     dietRepository.deleteoverlap(diet.getId(), diet.getDname());
                     return "해당 음식명과 칼로리가 합쳐졌습니다.";
                 } else {
                     // 이미 없는 경우 새로운 음식 이름과 칼로리로 업데이트
-                    dietRepository.updateAll(diet.getId(), diet.getDname(), newName, newCalories);
+                    dietRepository.updateAll(diet.getId(), diet.getDname(), diet.getRename(), diet.getRecalories());
                     return "해당 음식명과 칼로리가 변경 되었습니다.";
                 }
             }
             // 새로운 음식 이름만 있는 경우
-            else if (newName != null) {
+            else if (diet.getRename() != null) {
                 // 새로운 음식 이름이 이미 존재하는 경우
-                Optional<Diet> testname = dietRepository.renametest(diet.getId(), newName);
+                Optional<Diet> testname = dietRepository.renametest(diet.getId(), diet.getRename());
                 if (testname.isPresent()) {
                     // 이미 있는 음식이 름이면 칼로리만 업데이트
                     int sumcalories = dietRepository.thiscalories(diet.getId(), diet.getDname());
-                    dietRepository.updateExistingDnameWithsumCalories(diet.getId(), newName, sumcalories);
+                    dietRepository.updateExistingDnameWithsumCalories(diet.getId(), diet.getRename(), sumcalories);
                     dietRepository.deleteoverlap(diet.getId(), diet.getDname());
                     return "해당 음식명이 합쳐졌습니다.";
                 } else {
                     //  없는 경우 새로운 음식 이름으로 업데이트
-                    dietRepository.updateExistingEnameWithTime(diet.getId(), diet.getDname(), newName);
+                    dietRepository.updateExistingEnameWithTime(diet.getId(), diet.getDname(), diet.getRename());
                     return "해당 음식명 변경되었습니다.";
                 }
             }
             // 새로운 음식 칼로리만 있는 경우
-            else if (newCalories != 0) {
+            else if (diet.getRecalories() != 0) {
                 // 음식 칼로리만 업데이트
-                dietRepository.updatcalories(diet.getId(), diet.getDname(), newCalories);
+                dietRepository.updatcalories(diet.getId(), diet.getDname(), diet.getRecalories());
                 return "해당 음식의 칼로리가 변경되었습니다.";
             }
             // 새로운 음식 이름과 칼로리 모두 없는 경우

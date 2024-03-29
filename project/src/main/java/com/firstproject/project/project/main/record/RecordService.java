@@ -35,7 +35,6 @@ public class RecordService {
         //지난주 운동기록이 없을 경우
         if (last == null) {
             last = 0;
-
         }
         //이번주 운동기록이 없을 경우
         if (week == null) {
@@ -79,48 +78,43 @@ public class RecordService {
     @Transactional
     public String update(Record record) {
         Record dbrecord = recordRepository.findByIdAndEname(record.getId(), record.getEname());
-
         // 운동 기록이 존재하는 경우
         if (dbrecord != null) {
-            // 새로운 운동 이름과 시간을 받아옴
-            String newName = record.getRename();
-            int newTime = record.getRetime();
-
             // 새로운 운동 이름과 시간이 모두 있는 경우
-            if (newName != null && newTime != 0) {
+            if (record.getRename() != null && record.getRetime() != 0) {
                 // 새로운 운동 이름이 이미 존재하는 경우
-                Optional<Record> testname = recordRepository.renametest(record.getId(), newName);
+                Optional<Record> testname = recordRepository.renametest(record.getId(), record.getRename());
                 if (testname.isPresent()) {
                     // 이미 있는 운동이면 합치기
-                    recordRepository.updaterenameretime(record.getId(), newName, newTime);
+                    recordRepository.updaterenameretime(record.getId(), record.getRename(),record.getRetime());
                     recordRepository.deleteoverlap(record.getId(), record.getEname());
                     return "해당 운동명과 시간이 합쳐졌습니다.";
                 } else {
                     // 이미 없는 경우 새로운 운동 이름과 시간으로 업데이트
-                    recordRepository.updateAll(record.getId(), record.getEname(), newName, newTime);
+                    recordRepository.updateAll(record.getId(), record.getEname(), record.getRename(), record.getRetime());
                     return "해당 운동명과 시간이 변경 되었습니다.";
                 }
             }
             // 새로운 운동 이름만 있는 경우
-            else if (newName != null) {
+            else if ( record.getRename() != null) {
                 // 새로운 운동 이름이 이미 존재하는 경우
-                Optional<Record> testname = recordRepository.renametest(record.getId(), newName);
+                Optional<Record> testname = recordRepository.renametest(record.getId(),  record.getRename());
                 if (testname.isPresent()) {
                     // 이미 있는 운동이면 시간만 업데이트
                     int sumemin = recordRepository.emin(record.getId(),record.getEname());
-                    recordRepository.updateExistingEnameWithTime(record.getId(), newName, sumemin);
+                    recordRepository.updateExistingEnameWithTime(record.getId(),  record.getRename(), sumemin);
                     recordRepository.deleteoverlap(record.getId(), record.getEname());
                     return "해당 운동의 이름이 합쳐졌습니다.";
                 } else {
                     //  없는 경우 새로운 운동 이름으로 업데이트
-                    recordRepository.updateExistingEnameWithTime(record.getId(),record.getEname(), newName);
+                    recordRepository.updateExistingEnameWithTime(record.getId(),record.getEname(),  record.getRename());
                     return "해당 운동의 이름이 변경되었습니다.";
                 }
             }
             // 새로운 운동 시간만 있는 경우
-            else if (newTime != 0) {
+            else if (record.getRetime() != 0) {
                 // 운동 시간만 업데이트
-                recordRepository.updattime(record.getId(), record.getEname(), newTime);
+                recordRepository.updattime(record.getId(), record.getEname(), record.getRetime());
                 return "해당 운동의 시간이 변경되었습니다.";
             }
             // 새로운 운동 이름과 시간이 모두 없는 경우

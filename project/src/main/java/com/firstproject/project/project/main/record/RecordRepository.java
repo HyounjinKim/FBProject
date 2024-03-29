@@ -78,14 +78,6 @@ public interface RecordRepository extends JpaRepository<Record, String> {
     @Query("UPDATE Record SET ename = :rename, emin = :retime WHERE id = :id AND ename = :ename AND DATE(rdatetime) = CURDATE()")
     void updateAll(@Param("id") String id, @Param("ename") String ename, @Param("rename") String rename, @Param("retime") int retime);
 
-    //운동 이름 바꾸기
-    @Transactional
-    @Modifying
-    @Query("UPDATE Record SET ename = :newName WHERE id = :id AND ename = :oldName AND DATE(rdatetime) = CURDATE()")
-    void updateEname(@Param("id") String id, @Param("oldName") String oldName, @Param("newName") String newName);
-
-
-
     //운동 시간바꾸기
     @Transactional
     @Modifying
@@ -95,16 +87,16 @@ public interface RecordRepository extends JpaRepository<Record, String> {
     //이미 있는 운동명으로 변경시 운동합치기
     //운동명 변경시 운동합치기
     @Modifying
-    @Query("UPDATE Record SET emin = emin + :additionalTime WHERE id = :id AND ename = :rename AND DATE(rdatetime) = CURDATE()")
-    void updateExistingEnameWithTime(@Param("id") String id, @Param("rename") String rename, @Param("additionalTime") int additionalTime);
+    @Query("UPDATE Record SET emin = emin + :summin WHERE id = :id AND ename = :rename AND DATE(rdatetime) = CURDATE()")
+    void updateExistingEnameWithTime(@Param("id") String id, @Param("rename") String rename, @Param("summin") int summin);
     //운동명 바꿀면서 합쳐질때 운동시간을 미리 저장하는 쿼리문
     @Query("SELECT emin FROM Record WHERE id = :id AND ename = :ename AND DATE(rdatetime) = CURDATE()")
     int emin(@Param("id") String id, @Param("ename") String ename);
 
     //운동명만 바꾸기
     @Modifying
-    @Query("UPDATE Record SET ename = :newName WHERE id = :id AND ename = :existingName AND DATE(rdatetime) = CURDATE()")
-    void updateExistingEnameWithTime(@Param("id") String id, @Param("existingName") String existingName, @Param("newName") String newName);
+    @Query("UPDATE Record SET ename = :rename WHERE id = :id AND ename = :ename AND DATE(rdatetime) = CURDATE()")
+    void updateExistingEnameWithTime(@Param("id") String id, @Param("ename") String ename , @Param("rename") String rename);
 
     //이미 있는 운동명으로 변경 변경된 운동시간
     @Transactional
