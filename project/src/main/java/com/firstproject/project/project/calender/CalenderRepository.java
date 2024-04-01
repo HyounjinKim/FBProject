@@ -25,9 +25,9 @@ public interface CalenderRepository extends JpaRepository<User, String> {
 
 
     //한달치 캘린더리포지토리
-    @Query(value = "SELECT SUM(dcalories) FROM diet WHERE id = :id AND YEAR(ddatetime) = YEAR(NOW()) AND MONTH(ddatetime) = MONTH(NOW())",nativeQuery = true)
+    @Query(value = "SELECT SUM(dcalories) FROM diet WHERE id = :id AND ddatetime >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)",nativeQuery = true)
     Optional<Double> dietmonth(@Param("id") String id);
 
-    @Query(value = "SELECT SUM(e.ecalories * r.emin) FROM exercise e LEFT JOIN record r ON r.ename = e.ename WHERE id = :id AND YEAR(rdatetime) = YEAR(NOW()) AND MONTH(rdatetime) = MONTH(NOW())",nativeQuery = true)
+    @Query(value = "SELECT COALESCE(SUM(e.ecalories * r.emin), 0) FROM record r LEFT JOIN exercise e ON r.ename = e.ename WHERE r.id = :id AND rdatetime >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)",nativeQuery = true)
     Optional<Double> exermonth(@Param("id") String id);
 }
