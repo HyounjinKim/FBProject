@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfig {
     @Bean
     public GroupedOpenApi loginApi(){
-        String[] path = {"/login/**","/user/**","/main/**"};
+        String[] path = {"/login/**","/user/**","/main/**","/api/follow/**"};
 
         return GroupedOpenApi.builder()
                 .group("login")
