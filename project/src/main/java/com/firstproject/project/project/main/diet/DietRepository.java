@@ -45,14 +45,14 @@ public interface DietRepository extends JpaRepository<Diet, String> {
     @Transactional
     @Modifying
     @Query("DELETE FROM Diet WHERE id = :id AND dname = :dname AND DATE(ddatetime) = DATE(:date)")
-    void deleteByIdAndEnameAndRdatetime(@Param("id")String id, @Param("dname")String dname, @Param("date")String date);
+    void deleteByIdAndEnameAndRdatetime(@Param("id") String id, @Param("dname") String dname, @Param("date") String date);
 
 
     //해당 날짜 삭제
     @Transactional
     @Modifying
     @Query("DELETE FROM Diet WHERE id = :id AND DATE(ddatetime) = DATE(:date)")
-    void deleteByIdAndRdatetime(@Param("id")String id,@Param("date") String date);
+    void deleteByIdAndRdatetime(@Param("id") String id, @Param("date") String date);
 
 
     //유효성 검사
@@ -113,11 +113,11 @@ public interface DietRepository extends JpaRepository<Diet, String> {
     @Transactional
     @Modifying
     @Query("UPDATE Diet SET dcalories = dcalories + :recalories WHERE id = :id  AND dname = :rename AND DATE(ddatetime) = CURDATE()")
-    void updaterenamerecalories(@Param("id")String id, @Param("rename")String newName, @Param("recalories")float recalories);
+    void updaterenamerecalories(@Param("id") String id, @Param("rename") String newName, @Param("recalories") float recalories);
 
     //음식명 칼로리 변경
     @Transactional
     @Modifying
     @Query("UPDATE Diet SET dname = :rename, dcalories = :recalories WHERE id = :id AND dname = :dname AND DATE(ddatetime) = CURDATE()")
-    void updateAll(@Param("id")String id, @Param("dname")String dname, @Param("rename")String newName, @Param("recalories")float newCalories);
+    void updateAll(@Param("id") String id, @Param("dname") String dname, @Param("rename") String newName, @Param("recalories") float newCalories);
 }

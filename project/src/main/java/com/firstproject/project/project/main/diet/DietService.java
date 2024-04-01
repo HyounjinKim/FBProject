@@ -21,15 +21,16 @@ public class DietService {
 
     private final DietRepository dietRepository;
 
-    public List<Diet> Week(String id) {
+    public String Week(String id) {
+        StringBuilder daysBuilder = new StringBuilder();
 
         //지난주
         LocalDate now = LocalDate.now();
-        LocalDateTime endOfLastWeek = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY)).minusWeeks(1).atStartOfDay();
-        LocalDateTime startOfLastWeek = endOfLastWeek.minusDays(6);
+        LocalDate endOfLastWeek = now.with(TemporalAdjusters.previous(DayOfWeek.SUNDAY));
+        LocalDate startOfLastWeek = endOfLastWeek.with(TemporalAdjusters.previous(DayOfWeek.MONDAY));
 
         //지난주 섭취 칼로리
-        Integer last = dietRepository.findCalculatedCaloriesByLastWeekAndId(startOfLastWeek, endOfLastWeek, id);
+        Integer last = dietRepository.findCalculatedCaloriesByLastWeekAndId(startOfLastWeek.atStartOfDay(), endOfLastWeek.atStartOfDay(), id);
 
         //이번주 섭취 칼로리
         Integer week = dietRepository.findDcById(id);
@@ -51,25 +52,21 @@ public class DietService {
         if (day == null) {
             day = 0;
         }
-
         //오늘 섭취한 음식이 있는경우
         for (int i = 0; i < eat.size(); i++) {
-            list.add(Diet.builder()
-                    .weekcalories(week)
-                    .lastcalories(last)
-                    .daycalories(day)
-                    .dcalories(daycalories.get(i))
-                    .dname(eat.get(i))
-                    .build());
+
+            String name = eat.get(i);
+            int days = daycalories.get(i);
+            daysBuilder.append(name).append(" ").append(days).append("calorie").append("\n");
+
         }
-//오늘 섭취한 음식이 없는경우
-        if (eat.size() == 0) {
-            list.add(Diet.builder()
-                    .weekcalories(week)
-                    .lastcalories(last)
-                    .build());
+        //오늘 섭취한 음식이 없는경우
+        if (eat.isEmpty()) {
+            daysBuilder.append("오늘 섭취 칼로리 ").append(day).append(" calorie").append("\n").append("지난주 섭취 칼로리 ").append(last).append(" calorie ").append("\n").append("이번주 섭취 칼로리 ").append(week).append(" calorie ");
+        } else {
+            daysBuilder.append("오늘 섭취 칼로리 ").append(day).append(" calorie ").append("\n").append("지난주 섭취 칼로리 ").append(last).append(" calorie ").append("\n").append("이번주 섭취 칼로리 ").append(week).append(" calorie ");
         }
-        return list;
+        return daysBuilder.toString();
     }
 
     @Transactional

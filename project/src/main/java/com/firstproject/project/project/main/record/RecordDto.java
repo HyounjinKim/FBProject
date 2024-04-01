@@ -12,20 +12,17 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@Schema(title = "운동기록Dto",description = "Record DB 유효성 클래스")
+@Schema(title = "운동기록Dto", description = "Record DB 유효성 클래스")
 public class RecordDto {
     @Schema(title = "기본키")
     private int rindex;
 
-//    @NotBlank
     @Schema(title = "운동한시간(분)")
     private int emin;
 
-//    @NotBlank
     @Schema(title = "운동이름")
     private String ename;
 
-//    @NotBlank
     @Schema(title = "사용자 아이디")
     private String id;
 
@@ -41,14 +38,4 @@ public class RecordDto {
     @Schema(title = "삭제시 삭제할 시간")
     private String date;
 
-
-
-    public static Record of(RecordDto recordDTo) {
-        Record record = new Record();
-        record.setEname(recordDTo.getEname());
-        record.setId(recordDTo.getId());
-        record.setEmin(recordDTo.getEmin());
-        record.setRdatetime(LocalDate.from(recordDTo.getRdatetime()).atStartOfDay());
-        return record;
-    }
 }

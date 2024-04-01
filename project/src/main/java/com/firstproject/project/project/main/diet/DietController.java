@@ -1,7 +1,6 @@
 package com.firstproject.project.project.main.diet;
 
-import com.firstproject.project.project.main.record.Record;
-import com.firstproject.project.project.main.record.RecordDto;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,10 +21,10 @@ public class DietController {
 
     @Operation(summary = "음식기록 조회")
     @PostMapping("")
-    public ResponseEntity<List<Diet>> week(@RequestBody DietDto dietDto) {
-        List<Diet> list = dietService.Week(dietDto.getId());
+    public ResponseEntity<String> week(@RequestBody DietDto dietDto) {
+        String text = dietService.Week(dietDto.getId());
 
-        return ResponseEntity.status(HttpStatus.OK).body(list);
+        return ResponseEntity.status(HttpStatus.OK).body(text);
 
     }
 

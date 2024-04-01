@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="0d911126-7fab-4f83-ace4-4cf0f19a3dd4" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/com/firstproject/project/project/main/diet/DietController.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/com/firstproject/project/project/main/diet/DietController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/com/firstproject/project/project/main/diet/DietDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/com/firstproject/project/project/main/diet/DietDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/com/firstproject/project/project/main/record/RecordController.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/com/firstproject/project/project/main/record/RecordController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/com/firstproject/project/project/main/record/RecordDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/com/firstproject/project/project/main/record/RecordDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/com/firstproject/project/project/main/record/RecordService.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/com/firstproject/project/project/main/record/RecordService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/classes/com/firstproject/project/project/main/diet/DietController.class" beforeDir="false" afterPath="$PROJECT_DIR$/project/target/classes/com/firstproject/project/project/main/diet/DietController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/classes/com/firstproject/project/project/main/diet/DietRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/project/target/classes/com/firstproject/project/project/main/diet/DietRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/classes/com/firstproject/project/project/main/record/RecordController.class" beforeDir="false" afterPath="$PROJECT_DIR$/project/target/classes/com/firstproject/project/project/main/record/RecordController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/classes/com/firstproject/project/project/main/record/RecordDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/project/target/classes/com/firstproject/project/project/main/record/RecordDto.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/classes/com/firstproject/project/project/main/record/RecordRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/project/target/classes/com/firstproject/project/project/main/record/RecordRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/classes/com/firstproject/project/project/main/record/RecordService.class" beforeDir="false" afterPath="$PROJECT_DIR$/project/target/classes/com/firstproject/project/project/main/record/RecordService.class" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 7
+}]]></component>
+  <component name="ProjectId" id="2eTxftcFHAJKZ4TaapI2wYJVlFK" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "정영웅",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/project",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0d911126-7fab-4f83-ace4-4cf0f19a3dd4" name="Changes" comment="" />
+      <created>1711942476031</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1711942476031</updated>
+      <workItem from="1711942477291" duration="18000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

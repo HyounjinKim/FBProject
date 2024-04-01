@@ -19,48 +19,44 @@ import java.util.Optional;
 public class RecordService {
     private final RecordRepository recordRepository;
 
-    public List<Record> Week(String id) {
+    public String Week(String id) {
+        StringBuilder daysBuilder = new StringBuilder();
+
         List<String> ename = recordRepository.name(id);
         List<Integer> daytime = recordRepository.time(id);
         List<Integer> daytotal = recordRepository.calories(id);
-        //이번주 소모 칼로리
+        // 이번주 소모 칼로리
         Integer week = recordRepository.findEMinById(id);
-        LocalDate now = LocalDate.now();
-        LocalDateTime endOfLastWeek = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY)).minusWeeks(1).atStartOfDay();
-        LocalDateTime startOfLastWeek = endOfLastWeek.minusDays(6);
-//지난주 운동 정보
-        Integer last = recordRepository.findCalculatedEMinByLastWeekAndId(startOfLastWeek, endOfLastWeek, id);
 
-        List<Record> list = new ArrayList<>();
-        //지난주 운동기록이 없을 경우
+        LocalDate now = LocalDate.now();
+        LocalDate endOfLastWeek = now.with(TemporalAdjusters.previous(DayOfWeek.SUNDAY));
+        LocalDate startOfLastWeek = endOfLastWeek.with(TemporalAdjusters.previous(DayOfWeek.MONDAY));
+        // 지난주 운동 정보
+        Integer last = recordRepository.findCalculatedEMinByLastWeekAndId(startOfLastWeek.atStartOfDay(), endOfLastWeek.atStartOfDay(), id);
+        // 지난주 운동기록이 없을 경우
         if (last == null) {
             last = 0;
         }
-        //이번주 운동기록이 없을 경우
+        // 이번주 운동기록이 없을 경우
         if (week == null) {
             week = 0;
         }
-        //오늘 운동한 기록이 있을 경우
+        // 오늘 운동한 기록이 있을 경우
         for (int i = 0; i < ename.size(); i++) {
-            list.add(Record.builder()
-                    .ename(ename.get(i))
-                    .dayemin(daytime.get(i))
-                    .daycalories(daytotal.get(i))
-                    .lastwork(last)
-                    .weekwork(week)
-                    .build());
+            String name = ename.get(i);
+            int day = daytime.get(i);
+            int total = daytotal.get(i);
+            daysBuilder.append(name).append(" ").append(day).append("분 ").append(total).append(" calorie\n");
         }
-        //오늘 운동한 기록이 없을 경우
-        if (ename.size() == 0) {
-            list.add(Record.builder()
-                    .lastwork(last)
-                    .weekwork(week)
-                    .build());
+        // 오늘 운동한 기록이 없을 경우
+        if (ename.isEmpty()) {
+            daysBuilder.append("지난주 소모 칼로리 ").append(last).append(" calorie ").append("\n").append(" 이번주 소모 칼로리 ").append(week).append(" calorie ");
+        } else {
+            daysBuilder.append("지난주 소모 칼로리 ").append(last).append(" calorie ").append("\n").append("이번주 소모 칼로리 ").append(week).append(" calorie ");
         }
+        return daysBuilder.toString();
 
-        return list;
     }
-
 
     @Transactional
     public Record regist(Record record) {
@@ -68,7 +64,7 @@ public class RecordService {
         Record dbrecord = recordRepository.findByIdAndEname(record.getId(), record.getEname());
 
         if (dbrecord == null) {
-            return  recordRepository.save(record);
+            return recordRepository.save(record);
         } else {
             recordRepository.updateRecord(record.getId(), record.getEname(), record.getEmin());
             return dbrecord;
@@ -86,7 +82,7 @@ public class RecordService {
                 Optional<Record> testname = recordRepository.renametest(record.getId(), record.getRename());
                 if (testname.isPresent()) {
                     // 이미 있는 운동이면 합치기
-                    recordRepository.updaterenameretime(record.getId(), record.getRename(),record.getRetime());
+                    recordRepository.updaterenameretime(record.getId(), record.getRename(), record.getRetime());
                     recordRepository.deleteoverlap(record.getId(), record.getEname());
                     return "해당 운동명과 시간이 합쳐졌습니다.";
                 } else {
@@ -96,18 +92,18 @@ public class RecordService {
                 }
             }
             // 새로운 운동 이름만 있는 경우
-            else if ( record.getRename() != null) {
+            else if (record.getRename() != null) {
                 // 새로운 운동 이름이 이미 존재하는 경우
-                Optional<Record> testname = recordRepository.renametest(record.getId(),  record.getRename());
+                Optional<Record> testname = recordRepository.renametest(record.getId(), record.getRename());
                 if (testname.isPresent()) {
                     // 이미 있는 운동이면 시간만 업데이트
-                    int sumemin = recordRepository.emin(record.getId(),record.getEname());
-                    recordRepository.updateExistingEnameWithTime(record.getId(),  record.getRename(), sumemin);
+                    int sumemin = recordRepository.emin(record.getId(), record.getEname());
+                    recordRepository.updateExistingEnameWithTime(record.getId(), record.getRename(), sumemin);
                     recordRepository.deleteoverlap(record.getId(), record.getEname());
                     return "해당 운동의 이름이 합쳐졌습니다.";
                 } else {
                     //  없는 경우 새로운 운동 이름으로 업데이트
-                    recordRepository.updateExistingEnameWithTime(record.getId(),record.getEname(),  record.getRename());
+                    recordRepository.updateExistingEnameWithTime(record.getId(), record.getEname(), record.getRename());
                     return "해당 운동의 이름이 변경되었습니다.";
                 }
             }
@@ -149,5 +145,7 @@ public class RecordService {
             }
         }
     }
-
 }
+
+
+
