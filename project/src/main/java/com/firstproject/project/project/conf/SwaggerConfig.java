@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Configuration;
 
 @OpenAPIDefinition(
         info = @Info(title = "운동,음식 칼로리 기록",
-        description = "로그인,회원가입에 관한 스웨거 문서",
-        version = "v1.0.0")
+                description = "로그인,회원가입에 관한 스웨거 문서",
+                version = "v1.0.0")
 )
 
 @Configuration
