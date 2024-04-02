@@ -25,7 +25,3 @@ spring:
   sql:
     init:
       mode: always
-
-jasypt:
-  encryptor:
-    password: ${PASSWORD}

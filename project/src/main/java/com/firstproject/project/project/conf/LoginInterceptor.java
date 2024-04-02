@@ -18,15 +18,19 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
+        if(request.getRequestURI().contains("swagger")
+        || request.getRequestURI().contains("v3")){
+            return true;
+        }
+
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Basic ")) {
-            // Basic Authentication 헤더에서 "username:password"를 디코딩합니다.
             String credentials = new String(Base64.getDecoder().decode(authHeader.substring(6)));
             String[] values = credentials.split(":", 2);
-            String username = values[0];
+            String userid = values[0];
             String password = values[1];
 
-            User user = loginRepository.findByIdAndPassword(username, password);
+            User user = loginRepository.findByIdAndPassword(userid, password);
 
             if (user != null) {
                 return true;

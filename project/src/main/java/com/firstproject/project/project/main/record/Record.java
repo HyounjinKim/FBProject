@@ -13,8 +13,9 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 @AllArgsConstructor
+@ToString
 @NoArgsConstructor
-@Table(name = "Record")
+@Table(name = "record")
 @Schema(title = "운동기록")
 public class Record {
 
@@ -30,6 +31,7 @@ public class Record {
     @Column(nullable = false)
     @Schema(title = "운동이름")
     private String ename;
+
     @Column(nullable = false)
     @Schema(title = "사용자 아이디")
     private String id;
@@ -54,5 +56,17 @@ public class Record {
     @Schema(title = "오늘 운동별 소모 칼로리")
     private int daycalories;
 
+
+    @Transient
+    @Schema(title = "변경시 변경할 이름")
+    private String rename;
+
+    @Transient
+    @Schema(title = "변경시 변경할 운동시간(분)")
+    private int retime;
+
+    @Transient
+    @Schema(title = "삭제시 삭제할 시간")
+    private String date;
 
 }

@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/login")
+@RequestMapping("login")
 @Tag(name = "LoginController",description = "로그인,회원가입,아이디 중복체크,아이디/비밀번호 찾기 기능")
 public class LoginController {
 
@@ -27,24 +27,16 @@ public class LoginController {
     private final LoginRepository loginRepository;
 
     @Operation(summary = "로그인")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200",description = "OK"),
-            @ApiResponse(responseCode = "404",description = "아이디와 비밀번호가 없거나 틀렸을때 나옴")
-    })
     @PostMapping
-    public ResponseEntity<User> postLogin(@RequestBody LoginInfo loginInfo){
+    public ResponseEntity<User> getLogin(@RequestBody LoginInfo loginInfo){
         User dbuser = loginService.findByUser(loginInfo.getId(), loginInfo.getPassword());
 
         return ResponseEntity.status(HttpStatus.OK).body(dbuser);
     }
 
     @Operation(summary = "아이디 중복체크")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200",description = "OK"),
-            @ApiResponse(responseCode = "400",description = "아이디가 중복일때 나옴")
-    })
     @PostMapping("/make/dupl")
-    public ResponseEntity<String> postDuplID(@RequestBody UserIdCheck userIdCheck){
+    public ResponseEntity<String> getDuplID(@RequestBody UserIdCheck userIdCheck){
 
         Optional<User> user =  loginRepository.findById(userIdCheck.getIdCheck());
         if(user.isEmpty()){
@@ -54,10 +46,6 @@ public class LoginController {
     }
 
     @Operation(summary = "회원가입")
-    @ApiResponses({
-            @ApiResponse(responseCode = "201",description = "CREATED"),
-            @ApiResponse(responseCode = "400",description = "정보입력이 잘못됐을때 나옴")
-    })
     @PostMapping("/make")
     public ResponseEntity<User> postMakeID(@RequestBody @Valid UserDto userDto){
         userDto.setUser_date(LocalDateTime.now());
@@ -71,10 +59,6 @@ public class LoginController {
     }
 
     @Operation(summary = "아이디 찾기")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200",description = "OK"),
-            @ApiResponse(responseCode = "404",description = "입력한 정보가 없을때 나옴")
-    })
     @PostMapping("/findid")
     public ResponseEntity<String> getFindID(@RequestBody UserFindId userFindId){
         String id = loginService.findID(userFindId.getName(),userFindId.getEmail());
@@ -83,10 +67,6 @@ public class LoginController {
     }
 
     @Operation(summary = "비밀번호 찾기")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200",description = "OK"),
-            @ApiResponse(responseCode = "404",description = "입력한 정보가 없을때 나옴")
-    })
     @PostMapping("/findpw")
     public ResponseEntity<String> getFindPW(@RequestBody UserFindPassword userFindPassword){
         String check = loginService.findPW(userFindPassword.getId(),userFindPassword.getEmail());
@@ -95,14 +75,10 @@ public class LoginController {
     }
 
     @Operation(summary = "비밀번호 수정")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200",description = "OK"),
-            @ApiResponse(responseCode = "404",description = "입력한 정보가 없을때 나옴")
-    })
     @PutMapping("/findpw")
-    public ResponseEntity<User> putFindPW(@RequestBody @Valid PasswordCheck passwordCheck){
+    public ResponseEntity<String> putFindPW(@RequestBody @Valid PasswordCheck passwordCheck){
         User dbuser = loginService.updatePW(passwordCheck.getId(),passwordCheck.getPassword(),passwordCheck.getPasswordCheck());
 
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(dbuser);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("변경된 비밀번호 = "+dbuser.getPassword());
     }
 }

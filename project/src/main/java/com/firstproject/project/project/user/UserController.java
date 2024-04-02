@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
-@Tag(name = "UserContoroller",description = "사용자 정보 확인,수정,탈퇴")
+@Tag(name = "UserContoroller",description = "사용자 정보 확인,수정,탈퇴 기능")
 public class UserController {
 
     private final UserService userService;

@@ -17,13 +17,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString
 @Entity
-@Table(name = "users")
+@Table(name = "User")
 @Schema(title = "유저 정보",description = "user table에 관한 내용")
 @DynamicInsert
 public class User {
 
     @Id
-    @Schema(title = "유저 아이디",description = "유저 아이디를 넣어주세요.")
+    @Schema(title = "유저 아이디")
     private String id;
 
     @Column(nullable = false)
