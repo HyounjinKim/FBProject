@@ -10,8 +10,10 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 public class ErrorResponse {
+
     private String errorCode;
     private String errorMessage;
     @JsonFormat(pattern = "yy-MM-dd HH:mm:ss")
     private LocalDateTime errorTime;
+
 }

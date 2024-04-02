@@ -1,6 +1,5 @@
 package com.firstproject.project.project.exception;
 
-
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
@@ -23,9 +22,7 @@ public enum ErrorCode {
     PASSWORDPATTERN(HttpStatus.BAD_REQUEST,"PASSWORDPATTERN","비밀번호는 8~15자 영문 대 소문자, 숫자, 특수문자를 사용하세요."),
     DUPLICATIONNICKNAME(HttpStatus.BAD_REQUEST,"DUPLICATIONNICKNAME","이미 사용 중인 닉네임입니다."),
     USERNOTFOUND(HttpStatus.NOT_FOUND,"USERNOTFOUND","검색한 사용자가 없습니다."),
-    YOURNICKNAME(HttpStatus.BAD_REQUEST,"YOURNICKNAME","자신의 닉네임은 검색할 수 없습니다.")
-
-    ;
+    YOURNICKNAME(HttpStatus.BAD_REQUEST,"YOURNICKNAME","자신의 닉네임은 검색할 수 없습니다.");
 
     private HttpStatus httpStatus;
     private String errorcode;
