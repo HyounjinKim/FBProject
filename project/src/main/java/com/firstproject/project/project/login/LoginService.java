@@ -15,12 +15,12 @@ public class LoginService {
     private final LoginRepository loginRepository;
 
     public User findByUser(String id, String pw) {
-        User user = loginRepository.findByIdAndPassword(id,pw);
+        User user = loginRepository.findByIdAndPassword(id, pw);
 
-        if(user == null){
+        if (user == null) {
             throw new LoginException(ErrorCode.NOTFOUND);
         }
-        if(user.getResign().equals(Resign.Y)){
+        if (user.getResign().equals(Resign.Y)) {
             throw new LoginException(ErrorCode.INFONOTFOUND);
         }
 
@@ -33,83 +33,68 @@ public class LoginService {
         User dupphonenum = loginRepository.findByPhonenumber(user.getPhonenumber());
         Optional<User> dupeid = loginRepository.findById(user.getId());
 
-        if(!dupeid.isEmpty()){
+        if (!dupeid.isEmpty()) {
             throw new LoginException(ErrorCode.DUPLICATIONID);
-        }
-        else if(dupemail != null){
+        } else if (dupemail != null) {
             throw new LoginException(ErrorCode.DUPLICATIONEMAIL);
-        }
-        else if(dupnickname != null){
+        } else if (dupnickname != null) {
             throw new LoginException(ErrorCode.DUPLICATIONNICKNAME);
-        }
-        else if(dupphonenum != null){
+        } else if (dupphonenum != null) {
             throw new LoginException(ErrorCode.DUPLICATIONPHONENUM);
-        }
-        else if(user.getId() == null){
+        } else if (user.getId() == null) {
             throw new LoginException(ErrorCode.IDCHECK);
-        }
-        else if(user.getPassword() == null){
+        } else if (user.getPassword() == null) {
             throw new LoginException(ErrorCode.PASSWORDCHECK);
-        }
-        else if(user.getEmail() == null){
+        } else if (user.getEmail() == null) {
             throw new LoginException(ErrorCode.EMAILCHECK);
-        }
-        else if(user.getName() == null){
+        } else if (user.getName() == null) {
             throw new LoginException(ErrorCode.NAMECHECK);
-        }
-        else if(user.getGender() == null){
+        } else if (user.getGender() == null) {
             throw new LoginException(ErrorCode.GENDERERROR);
-        }
-        else if(user.getPhonenumber() == null){
+        } else if (user.getPhonenumber() == null) {
             throw new LoginException(ErrorCode.PHONENUMCHECK);
-        }
-        else if(user.getBirthdate() == null){
+        } else if (user.getBirthdate() == null) {
             throw new LoginException(ErrorCode.BIRTHDATECHECK);
-        }
-        else if(user.getPassword().length() < 8 || user.getPassword().length() > 15){
+        } else if (user.getPassword().length() < 8 || user.getPassword().length() > 15) {
             throw new LoginException(ErrorCode.PASSWORDSIZE);
-        }
-        else if(!user.getPassword().equals(user.getPasswordch())){
+        } else if (!user.getPassword().equals(user.getPasswordch())) {
             throw new LoginException(ErrorCode.PASSWORDDIFFERENT);
         }
-
         User dbuser = loginRepository.save(user);
 
         return dbuser;
     }
 
     public String findID(String name, String email) {
-        User user = loginRepository.findByNameAndEmail(name,email);
-        if(user == null){
+        User user = loginRepository.findByNameAndEmail(name, email);
+        if (user == null) {
             throw new LoginException(ErrorCode.INFONOTFOUND);
         }
-
         return user.getId();
     }
 
     public String findPW(String id, String email) {
-        User user = loginRepository.findByIdAndEmail(id,email);
+        User user = loginRepository.findByIdAndEmail(id, email);
 
-        if(user == null){
+        if (user == null) {
             throw new LoginException(ErrorCode.INFONOTFOUND);
         }
-
         return "OK";
     }
 
     public User updatePW(String id, String password, String passwordCheck) {
         Optional<User> user = loginRepository.findById(id);
 
-        if(user.isEmpty()){
+        if (user.isEmpty()) {
             throw new LoginException(ErrorCode.IDCHECK);
         }
 
-        User pwUser =  user.get();
+        User pwUser = user.get();
 
-        if(!password.equals(passwordCheck)){
+        if (!password.equals(passwordCheck)) {
             throw new LoginException(ErrorCode.PASSWORDDIFFERENT);
         }
-        if (password.length() < 8 || password.length() > 15){
+        if (password.length() < 8 || password.length() > 15) {
             throw new LoginException(ErrorCode.PASSWORDSIZE);
         }
         pwUser.setPassword(password);
