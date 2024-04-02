@@ -23,21 +23,16 @@ public class DietService {
 
     public String Week(String id) {
         StringBuilder daysBuilder = new StringBuilder();
-
         //지난주
         LocalDate now = LocalDate.now();
         LocalDate endOfLastWeek = now.with(TemporalAdjusters.previous(DayOfWeek.SUNDAY));
         LocalDate startOfLastWeek = endOfLastWeek.with(TemporalAdjusters.previous(DayOfWeek.MONDAY));
-
         //지난주 섭취 칼로리
         Integer last = dietRepository.findCalculatedCaloriesByLastWeekAndId(startOfLastWeek.atStartOfDay(), endOfLastWeek.atStartOfDay(), id);
-
         //이번주 섭취 칼로리
         Integer week = dietRepository.findDcById(id);
-
         //오늘칼로리
         List<Integer> daycalories = dietRepository.calories(id);
-
         List<String> eat = dietRepository.name(id);
         Integer day = dietRepository.daycalories(id);
         List<Diet> list = new ArrayList<>();
@@ -62,9 +57,15 @@ public class DietService {
         }
         //오늘 섭취한 음식이 없는경우
         if (eat.isEmpty()) {
-            daysBuilder.append("오늘 섭취 칼로리 ").append(day).append(" calorie").append("\n").append("지난주 섭취 칼로리 ").append(last).append(" calorie ").append("\n").append("이번주 섭취 칼로리 ").append(week).append(" calorie ");
+            daysBuilder.append("오늘 섭취 칼로리 ").append(day)
+                    .append(" calorie").append("\n").append("지난주 섭취 칼로리 ")
+                    .append(last).append(" calorie ").append("\n").append("이번주 섭취 칼로리 ")
+                    .append(week).append(" calorie ");
         } else {
-            daysBuilder.append("오늘 섭취 칼로리 ").append(day).append(" calorie ").append("\n").append("지난주 섭취 칼로리 ").append(last).append(" calorie ").append("\n").append("이번주 섭취 칼로리 ").append(week).append(" calorie ");
+            daysBuilder.append("오늘 섭취 칼로리 ").append(day)
+                    .append(" calorie ").append("\n").append("지난주 섭취 칼로리 ")
+                    .append(last).append(" calorie ").append("\n").append("이번주 섭취 칼로리 ")
+                    .append(week).append(" calorie ");
         }
         return daysBuilder.toString();
     }

@@ -27,16 +27,13 @@ public interface RecordRepository extends JpaRepository<Record, String> {
     Integer findCalculatedEMinByLastWeekAndId(@Param("startDate") LocalDateTime startDate,
                                               @Param("endDate") LocalDateTime endDate,
                                               @Param("id") String id);
-
     //오늘
     // 운동명 가져오기
     @Query("SELECT a.ename FROM Record a JOIN Exercise b ON a.ename = b.ename WHERE YEARWEEK(a.rdatetime) = YEARWEEK(NOW()) AND DATE(a.rdatetime) = CURDATE() AND a.id = :id GROUP BY a.ename")
     List<String> name(@Param("id") String id);
-
     //운동시간
     @Query("SELECT SUM(a.emin) AS total_e_min FROM Record a JOIN Exercise b ON a.ename = b.ename WHERE YEARWEEK(a.rdatetime) = YEARWEEK(NOW()) AND DATE(a.rdatetime) = CURDATE() AND a.id = :id GROUP BY a.ename")
     List<Integer> time(@Param("id") String id);
-
     //소모칼로리
     @Query("SELECT SUM(a.emin * b.ecalories) AS total_calories FROM Record a JOIN Exercise b ON a.ename = b.ename WHERE YEARWEEK(a.rdatetime) = YEARWEEK(NOW()) AND DATE(a.rdatetime) = CURDATE() AND a.id = :id GROUP BY a.ename ")
     List<Integer> calories(@Param("id") String id);
@@ -100,7 +97,7 @@ public interface RecordRepository extends JpaRepository<Record, String> {
     //운동명만 바꾸기
     @Transactional
     @Modifying
-    @Query("UPDATE Record SET ename = :rename WHERE id = :id AND ename = :ename AND DATE(rdatetime) = CURDATE()")
+    @Query(value = "UPDATE Record SET ename = :rename WHERE id = :id AND ename = :ename AND DATE(rdatetime) = CURDATE()")
     void updateExistingEnameWithTime(@Param("id") String id, @Param("ename") String ename, @Param("rename") String rename);
 
     //이미 있는 운동명으로 변경 변경된 운동시간
@@ -118,4 +115,6 @@ public interface RecordRepository extends JpaRepository<Record, String> {
     //유효성 검사
     @Query("SELECT r FROM Record r WHERE r.id = :id AND r.ename = :ename AND DATE(r.rdatetime) = CURDATE()")
     Record findByIdAndEname(@Param("id") String id, @Param("ename") String ename);
+
+
 }
