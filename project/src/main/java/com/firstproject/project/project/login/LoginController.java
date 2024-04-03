@@ -77,7 +77,8 @@ public class LoginController {
     @Operation(summary = "비밀번호 수정")
     @PutMapping("/findpw")
     public ResponseEntity<String> putFindPW(@RequestBody @Valid PasswordCheck passwordCheck){
-        User dbuser = loginService.updatePW(passwordCheck.getId(),passwordCheck.getPassword(),passwordCheck.getPasswordCheck());
+        User dbuser = loginService.updatePW
+                (passwordCheck.getId(),passwordCheck.getPassword(),passwordCheck.getPasswordCheck());
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("변경된 비밀번호 = "+dbuser.getPassword());
     }

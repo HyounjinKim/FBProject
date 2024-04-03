@@ -55,7 +55,8 @@ public class LoginService {
             throw new LoginException(ErrorCode.PHONENUMCHECK);
         } else if (user.getBirthdate() == null) {
             throw new LoginException(ErrorCode.BIRTHDATECHECK);
-        } else if (user.getPassword().length() < 8 || user.getPassword().length() > 15) {
+        } else if (user.getPassword().length() < 8
+                || user.getPassword().length() > 15) {
             throw new LoginException(ErrorCode.PASSWORDSIZE);
         } else if (!user.getPassword().equals(user.getPasswordch())) {
             throw new LoginException(ErrorCode.PASSWORDDIFFERENT);
