@@ -51,7 +51,7 @@ public class RecordService {
         // 오늘 운동한 기록이 없을 경우
         if (ename.isEmpty()) {
             daysBuilder.append("지난주 소모 칼로리 ").append(last).append(" calorie ")
-                    .append("\n").append(" 이번주 소모 칼로리 ").append(week).append(" calorie ");
+                    .append("\n").append("이번주 소모 칼로리 ").append(week).append(" calorie ");
         } else {
             daysBuilder.append("지난주 소모 칼로리 ").append(last).append(" calorie ")
                     .append("\n").append("이번주 소모 칼로리 ").append(week).append(" calorie ");

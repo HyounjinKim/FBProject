@@ -21,13 +21,9 @@ public enum ErrorCode {
     PASSWORDDIFFERENT(HttpStatus.BAD_REQUEST,"PASSWORDDIFFERENT","입력하신 패스워드가 다릅니다."),
     PASSWORDPATTERN(HttpStatus.BAD_REQUEST,"PASSWORDPATTERN","비밀번호는 8~15자 영문 대 소문자, 숫자, 특수문자를 사용하세요."),
     DUPLICATIONNICKNAME(HttpStatus.BAD_REQUEST,"DUPLICATIONNICKNAME","이미 사용 중인 닉네임입니다."),
-<<<<<<< HEAD
-
-    ;
-=======
     USERNOTFOUND(HttpStatus.NOT_FOUND,"USERNOTFOUND","검색한 사용자가 없습니다."),
     YOURNICKNAME(HttpStatus.BAD_REQUEST,"YOURNICKNAME","자신의 닉네임은 검색할 수 없습니다.");
->>>>>>> 10a7f1a13a89ced8ba1de36c58c1ec0dabf0dfbf
+
 
     private HttpStatus httpStatus;
     private String errorcode;
