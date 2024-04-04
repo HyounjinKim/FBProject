@@ -18,6 +18,7 @@ public class FollowService {
     private final FollowRepository followRepository;
 
     //1 사용자가 다른 사용자를 팔로우하고, 이를 데이터베이스에 저장
+    // {Nickname} 경로 변수를 통해 사용자의 아이디를 전달받습니다.
     @Transactional
     public void follow(String followerNickname, String followeeNickname) {
         User follower = userRepository.findByNickname(followerNickname)
@@ -41,14 +42,12 @@ public class FollowService {
         followRepository.delete(follow);
     }
 
-    //3 특정 사용자가 팔로잉하는 다른 사용자 목록을 가져옵니다. {Nickname} 경로 변수를 통해 사용자의 아이디를 전달받습니다.
+    //3 특정 사용자가 팔로잉하는 다른 사용자 목록을 가져옵니다.
     @Transactional
     public List<UserDto> getFollowings(String nickname) {
         User user = userRepository.findByNickname(nickname)
                 .orElseThrow(() -> new RuntimeException("Error : User is not found"));
-        System.out.println(user);
         List<Follow> followings = followRepository.findByFollower(user);
-        System.out.println(followings);
         return followings.stream()
                 .map(follow -> mapToDto(follow.getFollowee()))
                 .collect(Collectors.toList());
@@ -68,18 +67,8 @@ public class FollowService {
     private UserDto mapToDto(User user) {
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
-        userDto.setPassword(user.getPassword());
-        userDto.setPasswordch(user.getPasswordch());
-        userDto.setEmail(user.getEmail());
         userDto.setNickname(user.getNickname());
         userDto.setName(user.getName());
-        userDto.setGender(user.getGender());
-        userDto.setBirthdate(user.getBirthdate());
-        userDto.setPhonenumber(user.getPhonenumber());
-        userDto.setUser_date(user.getUser_date());
-        userDto.setResign(user.getResign());
-        userDto.setHeight(user.getHeight());
-        userDto.setWeight(user.getWeight());
 
         return userDto;
     }

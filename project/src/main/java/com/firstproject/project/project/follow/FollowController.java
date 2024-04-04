@@ -21,7 +21,8 @@ public class FollowController {
 
     //1 사용자가 다른 사용자를 팔로우하고, 이를 데이터베이스에 저장
     @PostMapping("/{followerNickname}/following/{followeeNickname}")
-    public ResponseEntity<String> follow(@PathVariable String followerNickname, @PathVariable String followeeNickname) {
+    public ResponseEntity<String> follow(@PathVariable String followerNickname,
+                                         @PathVariable String followeeNickname) {
         User follower = userRepository.findByNickname(followerNickname)
                 .orElseThrow(() -> new RuntimeException("Error: Follower not found"));
         User followee = userRepository.findByNickname(followeeNickname)
@@ -34,7 +35,8 @@ public class FollowController {
 
     //2 사용자가 다른 사용자를 언팔로우
     @DeleteMapping("/{followeeNickname}/unfollowing/{followerNickname}")
-    public ResponseEntity<String> unfollow(@PathVariable String followerNickname, @PathVariable String followeeNickname) {
+    public ResponseEntity<String> unfollow(@PathVariable String followerNickname,
+                                           @PathVariable String followeeNickname) {
         followService.unfollow(followerNickname, followeeNickname);
         String message = followeeNickname + "가 " + followerNickname + "와 친구관계를 삭제하였습니다.";
         return ResponseEntity.ok(message);
@@ -44,7 +46,6 @@ public class FollowController {
     @GetMapping("/{nickname}/followings")
     public ResponseEntity<List<UserDto>> getFollowings(@PathVariable String nickname) {
         Optional<User> optionalUser = userRepository.findByNickname(nickname);
-        System.out.println(optionalUser);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             return new ResponseEntity<>(followService.getFollowings(nickname), HttpStatus.OK);
